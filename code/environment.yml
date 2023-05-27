@@ -1,0 +1,44 @@
+name: myenv
+channels:
+  - anaconda
+  - defaults
+dependencies:
+  - blas=1.0=mkl
+  - ca-certificates=2022.4.26=hecd8cb5_0
+  - certifi=2020.6.20=pyhd3eb1b0_3
+  - intel-openmp=2023.1.0=ha357a0b_43547
+  - libcxx=14.0.6=h9765a3e_0
+  - libedit=3.1.20221030=h6c40b1e_0
+  - libffi=3.2.1=h0a44026_1007
+  - libgfortran=3.0.1=h93005f0_2
+  - mkl=2018.0.3=1
+  - mkl_fft=1.0.6=py35hb8a8100_0
+  - mkl_random=1.0.1=py35h5d10147_1
+  - ncurses=6.4=hcec6c5f_0
+  - numpy-base=1.15.2=py35h8a80b8c_0
+  - openssl=1.0.2u=h1de35cc_0
+  - pip=10.0.1=py35_0
+  - python=3.5.6=hc167b69_0
+  - readline=7.0=h1de35cc_5
+  - scipy=1.1.0=py35h28f7352_1
+  - setuptools=40.2.0=py35_0
+  - sqlite=3.33.0=hffcf06c_0
+  - tbb=2021.8.0=ha357a0b_0
+  - tbb4py=2018.0.5=py35h04f5b5a_0
+  - tk=8.6.12=h5d9f67b_0
+  - wheel=0.37.1=pyhd3eb1b0_0
+  - xz=5.4.2=h6c40b1e_0
+  - zlib=1.2.13=h4dc903c_0
+  - pip:
+    - cycler==0.10.0
+    - kiwisolver==1.1.0
+    - matplotlib==2.2.2
+    - numpy==1.15.4
+    - pillow==6.0.0
+    - pyparsing==2.4.7
+    - python-dateutil==2.8.2
+    - pytz==2023.3
+    - six==1.16.0
+    - torch==1.0.0
+    - torchvision==0.2.1
+prefix: /Users/abhibhagupta/opt/anaconda3/envs/myenv
