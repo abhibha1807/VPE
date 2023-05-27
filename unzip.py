@@ -1,32 +1,20 @@
-# import os
-# import zipfile
+import os
+import shutil
 
-# def unzip_all_zip_files(directory):
-#     for root, dirs, files in os.walk(directory):
-#         for file in files:
-#             if file.endswith('.zip'):
-#                 zip_path = os.path.join(root, file)
-#                 folder_name = os.path.splitext(file)[0]
-#                 folder_path = os.path.join(root, folder_name)
-                
-#                 with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-#                     zip_ref.extractall(folder_path)
-#                 os.remove(zip_path)
+def move_folder_contents(source_folder, target_folder):
+    # Create the target folder if it doesn't exist
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
     
-#     print("All zip files extracted successfully!")
-
-# # Example usage
-# directory = '/path/to/directory'
-# unzip_all_zip_files(directory)
-
-import zipfile
-
-def unzip_file(zip_file_path, extract_path):
-    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-        zip_ref.extractall(extract_path)
+    # Move all contents of the source folder to the target folder
+    for item in os.listdir(source_folder):
+        item_path = os.path.join(source_folder, item)
+        if os.path.isfile(item_path):
+            shutil.move(item_path, target_folder)
+        elif os.path.isdir(item_path):
+            shutil.move(item_path, target_folder)
 
 # Example usage
-zip_file_path = '/Users/abhibhagupta/Desktop/CMU/VPE/db/GTSRB/00000.zip'
-extract_path = '/Users/abhibhagupta/Desktop/CMU/VPE/db/GTSRB/0000_.zip'
-unzip_file(zip_file_path, extract_path)
-
+source_folder = '/path/to/source/folder'
+target_folder = '/path/to/target/folder'
+move_folder_contents(source_folder, target_folder)
