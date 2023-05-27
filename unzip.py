@@ -1,10 +1,16 @@
+import os
 import zipfile
 
-def unzip_file(zip_file_path, extract_path):
-    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-        zip_ref.extractall(extract_path)
+def unzip_all_zip_files(directory):
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith('.zip'):
+                zip_path = os.path.join(root, file)
+                with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                    zip_ref.extractall(root)
+                print(f"File '{file}' extracted successfully!")
 
 # Example usage
-zip_file_path = '/path/to/file.zip'
-extract_path = '/path/to/extract/location'
-unzip_file(zip_file_path, extract_path)
+directory = '/path/to/directory'
+unzip_all_zip_files(directory)
+
