@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+import os
 
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -14,7 +15,7 @@ import torchvision.transforms as transforms
 import torchvision.models as models
 
 import copy
-
+from torchvision.utils import save_image 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # desired size of the output image
@@ -41,17 +42,10 @@ def image_loader(image_name):
 
 
 
-style_img = image_loader("/Users/abhibhagupta/Desktop/Auto_Veh/VPE/code/rust_placeholder_copy.png")
-content_img = image_loader("/Users/abhibhagupta/Desktop/Auto_Veh/VPE/code/other_stop.jpg")
-
-assert style_img.size() == content_img.size(), \
-    "we need to import style and content images of the same size"
-
-
 # visualizing the content and style images
 unloader = transforms.ToPILImage()  # reconvert into PIL image
 
-plt.ion()
+# plt.ion()
 
 def imshow(tensor, title=None):
     image = tensor.cpu().clone()  # we clone the tensor to not do changes on it
@@ -63,11 +57,11 @@ def imshow(tensor, title=None):
     plt.pause(0.001) # pause a bit so that plots are updated
 
 
-plt.figure()
-imshow(style_img, title='Style Image')
+# plt.figure()
+# imshow(style_img, title='Style Image')
 
-plt.figure()
-imshow(content_img, title='Content Image')
+# plt.figure()
+# imshow(content_img, title='Content Image')
 
 class ContentLoss(nn.Module):
 
@@ -193,13 +187,13 @@ def get_style_model_and_losses(cnn, normalization_mean, normalization_std,
 
     return model, style_losses, content_losses
 
-input_img = content_img.clone()
+
 # if you want to use white noise instead uncomment the below line:
 # input_img = torch.randn(content_img.data.size(), device=device)
 
 # add the original input image to the figure:
-plt.figure()
-imshow(input_img, title='Input Image')
+# plt.figure()
+# imshow(input_img, title='Input Image')
 
 def get_input_optimizer(input_img):
     # this line to show that input is a parameter that requires a gradient
@@ -255,17 +249,76 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
 
     return input_img
 
-styled_output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std,
-                            content_img, style_img, input_img)
+directory_path = '/drive0-storage/VPE/db/GTSRB/'
 
-plt.figure()
-plt.xticks([])
-plt.yticks([])
-imshow(styled_output, title='Styled Output')
+# List all directories within the given directory
+numbers = [str(i).zfill(5) for i in range(43)]
+print(numbers)
 
-plt.show()
+
+import os
+
+# List of directory names
+directory_list = numbers
+
+# Path to the folder containing the directories
+folder_path = '/drive0-storage/VPE/db/GTSRB/'
+
+# Iterate over the directory names
+for directory_name in directory_list:
+    # Construct the complete path to the directory
+    directory_path = os.path.join(folder_path, directory_name)
+    
+    # Check if the directory exists
+    if os.path.isdir(directory_path):
+        # Process the directory
+        print(f"Processing directory: {directory_name}")
+        
+        # Iterate over the files in the directory
+        for file_name in os.listdir(directory_path):
+            # Construct the complete path to the file
+            if '.ppm' in file_name:
+                file_path = os.path.join(directory_path, file_name)
+                print(file_path)
+                style_img = image_loader("/drive0-storage/VPE/rust_placeholder_copy.png")
+                content_img = image_loader(file_path)
+                input_img = content_img.clone()
+                styled_output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std,
+                                content_img, style_img, input_img)
+               
+                #/drive0-storage/VPE/db/GTSRB/00000/00004_00023.ppm
+                get_filename = file_path.split('/')
+                print(get_filename)
+                
+                save_image(styled_output, "/drive0-storage/VPE/aug_db/train/" + get_filename[5] + '/' + get_filename[6].split('.')[0] + '.png')
+                
+                # Process the file
+                print(f"Processing file: {file_path}")
+                #break
+        #break
+    else:
+        print(f"Directory not found: {directory_name}")
+
+
+
+
+# content_img = image_loader("/Users/abhibhagupta/Desktop/Auto_Veh/VPE/code/other_stop.jpg")
+
+# assert style_img.size() == content_img.size(), \
+#     "we need to import style and content images of the same size"
+
+
+
+
+
+
+# plt.figure()
+# plt.xticks([])
+# plt.yticks([])
+# imshow(styled_output, title='Styled Output')
+
+# plt.show()
 
 # save styled image
-from torchvision.utils import save_image 
-save_image(styled_output, "lion-styled-with-26.jpg")
+
 
